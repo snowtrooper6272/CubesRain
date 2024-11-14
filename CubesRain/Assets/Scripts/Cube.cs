@@ -15,43 +15,48 @@ public class Cube : MonoBehaviour
     private int _minLifeDuration = 2;
     private int _maxLifeDuration = 5;
 
-    private void Awake()
-    {
-        _spawner = GameObject.FindWithTag("Spawner").GetComponent<Spawner>();
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (_isCollison == false)
         {
-            _renderer.material.color = new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            _renderer.material.color = GenerateRandomColor();
             _isCollison = true;
             _lifeDuration = Random.Range(_minLifeDuration, _maxLifeDuration);
+            StartCoroutine(DecreaseTimeOfBackPool());
         }
     }
 
-    private void Update()
+    private IEnumerator DecreaseTimeOfBackPool() 
     {
-        if (_isCollison) 
+        bool IsDestroy = false;
+
+        while (IsDestroy == false) 
         {
             if (_currentLifeDuration >= _lifeDuration) 
             {
                 _spawner.PlaceCube(this);
+                IsDestroy = true;
             }
 
             _currentLifeDuration += Time.deltaTime;
+            
+            yield return null;
         }
     }
 
-    public void Init() 
+    public void Init(Spawner spawner) 
     {
+        _spawner = spawner;
         transform.rotation = Quaternion.identity;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
-
-        Debug.Log(transform.rotation);
 
         _renderer.material.color = new Color(0,0,0);
         _isCollison = false;
         _currentLifeDuration = 0;
+    }
+
+    private Color GenerateRandomColor() 
+    {
+        return new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
     }
 }

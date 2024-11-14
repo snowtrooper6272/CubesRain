@@ -31,7 +31,7 @@ public class Spawner : MonoBehaviour
 
     private void poolObjectOnGet(Cube freeObject) 
     {
-        freeObject.Init();
+        freeObject.Init(this);
         freeObject.transform.position = new Vector3(Random.Range(_startPoint.transform.position.x - _startPoint.transform.localScale.x, _startPoint.transform.position.x + _startPoint.transform.localScale.x),
                                                     _startPoint.transform.position.y,
                                                     Random.Range(_startPoint.transform.position.z - _startPoint.transform.localScale.z, _startPoint.transform.position.z + _startPoint.transform.localScale.z));
