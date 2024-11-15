@@ -37,7 +37,7 @@ public class Spawner : MonoBehaviour
                                                     Random.Range(_startPoint.transform.position.z - _startPoint.transform.localScale.z, _startPoint.transform.position.z + _startPoint.transform.localScale.z));
         freeObject.gameObject.SetActive(true);
     }
-
+            
     private void Start()
     {
         InvokeRepeating(nameof(FalloutCube), 0f, 1);

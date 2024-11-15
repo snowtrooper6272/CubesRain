@@ -19,10 +19,13 @@ public class Cube : MonoBehaviour
     {
         if (_isCollison == false)
         {
-            _renderer.material.color = GenerateRandomColor();
-            _isCollison = true;
-            _lifeDuration = Random.Range(_minLifeDuration, _maxLifeDuration);
-            StartCoroutine(DecreaseTimeOfBackPool());
+            if (collision.gameObject.TryGetComponent(out Platform platform))
+            {
+                _renderer.material.color = GenerateRandomColor();
+                _isCollison = true;
+                _lifeDuration = Random.Range(_minLifeDuration, _maxLifeDuration);
+                StartCoroutine(DecreaseTimeOfBackPool());
+            }
         }
     }
 
