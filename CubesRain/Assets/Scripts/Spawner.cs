@@ -1,61 +1,53 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
-public class Spawner : MonoBehaviour
+public class Spawner<Creature> : MonoBehaviour where Creature : MonoBehaviour
 {
-    [SerializeField] private Cube _prefab;
-    [SerializeField] private GameObject _startPoint;
-    [SerializeField] private int _interval;
-    [SerializeField] private int _poolCapacity;
+    private int _poolCapacity;
+    private int _spawnedCount;
 
-    private int _poolMaxSize = 10;
-    private ObjectPool<Cube> _pool;
+    public event Action<int> ChangedActivedCount;
+    public event Action<int> ChangedSpawnedCount;
 
-    private void Awake()
+    public List<Creature> Pool { get; private set; } = new List<Creature>(0);
+    public int PoolCapacity => _poolCapacity;
+
+    public Spawner(Creature prefab, int capacity) 
     {
-        _pool = new ObjectPool<Cube>(
-            createFunc: () => Instantiate(_prefab),
-            actionOnGet: (obj) => poolObjectOnGet(obj),
-            actionOnRelease: (obj) => obj.gameObject.SetActive(false),
-            actionOnDestroy: (obj) => Destroy(obj),
-            collectionCheck: true,
-            defaultCapacity: _poolCapacity,
-            maxSize: _poolMaxSize
-            );
+        _poolCapacity = capacity;
+
+        for (int i = 0; i < _poolCapacity; i++) 
+        {
+            Creature newCreature = Instantiate(prefab);
+            newCreature.gameObject.SetActive(false);
+            Pool.Add(newCreature);
+        }
     }
 
-    private void poolObjectRelease(Cube returnedObject) 
+    public Creature Realese() 
     {
-        returnedObject.gameObject.SetActive(false);
+        if (Pool.Count == 0)
+            return null;
+
+        Creature realeseCreature = Pool[Pool.Count - 1];
+        Pool.Remove(realeseCreature);
+
+        realeseCreature.gameObject.SetActive(true);
+
+        _spawnedCount++;
+        ChangedSpawnedCount?.Invoke(_spawnedCount);
+        ChangedActivedCount?.Invoke(_poolCapacity - Pool.Count);
+
+        return realeseCreature;
     }
 
-    private void poolObjectOnGet(Cube freeObject) 
+    public void Storing(Creature storingCreature) 
     {
-        freeObject.Init(this);
-        freeObject.transform.position = new Vector3(Random.Range(_startPoint.transform.position.x - _startPoint.transform.localScale.x, _startPoint.transform.position.x + _startPoint.transform.localScale.x),
-                                                    _startPoint.transform.position.y,
-                                                    Random.Range(_startPoint.transform.position.z - _startPoint.transform.localScale.z, _startPoint.transform.position.z + _startPoint.transform.localScale.z));
-        freeObject.gameObject.SetActive(true);
-    }
-            
-    private void Start()
-    {
-        InvokeRepeating(nameof(FalloutCube), 0f, 1);
-    }
+        storingCreature.gameObject.SetActive(false);
+        Pool.Add(storingCreature);
 
-    private void FalloutCube() 
-    {
-        _pool.Get();
-    }
-
-    public void PlaceCube(Cube cube) 
-    {
-        _pool.Release(cube);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.TryGetComponent(out Cube cube))
-            _pool.Release(cube);
+        ChangedActivedCount?.Invoke(_poolCapacity - Pool.Count);
     }
 }

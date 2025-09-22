@@ -1,19 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Cube : MonoBehaviour
 {
     [SerializeField] private MeshRenderer _renderer;
     
-    private Spawner _spawner;
-    private bool _isCollison;
-
+    private Coroutine _decreaseTimeOfBackPool;
     private int _lifeDuration;
-    private float _currentLifeDuration;
-
     private int _minLifeDuration = 2;
     private int _maxLifeDuration = 5;
+    private bool _isCollison;
+
+    public event Action<Cube> Stored;
+
+    private void OnDisable()
+    {
+        if(_decreaseTimeOfBackPool != null)
+            StopCoroutine(_decreaseTimeOfBackPool);
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -22,44 +29,38 @@ public class Cube : MonoBehaviour
             if (collision.gameObject.TryGetComponent(out Platform platform))
             {
                 _renderer.material.color = GenerateRandomColor();
+                _lifeDuration = UnityEngine.Random.Range(_minLifeDuration, _maxLifeDuration);
+                _decreaseTimeOfBackPool = StartCoroutine(DecreaseTimeOfBackPool());
                 _isCollison = true;
-                _lifeDuration = Random.Range(_minLifeDuration, _maxLifeDuration);
-                StartCoroutine(DecreaseTimeOfBackPool());
             }
         }
     }
 
     private IEnumerator DecreaseTimeOfBackPool() 
     {
-        bool IsDestroy = false;
+        float currentLifeDuration = 0;
 
-        while (IsDestroy == false) 
+        while (currentLifeDuration < _lifeDuration) 
         {
-            if (_currentLifeDuration >= _lifeDuration) 
-            {
-                _spawner.PlaceCube(this);
-                IsDestroy = true;
-            }
-
-            _currentLifeDuration += Time.deltaTime;
+            currentLifeDuration += Time.deltaTime;
             
             yield return null;
         }
+
+        Stored.Invoke(this);
     }
 
-    public void Init(Spawner spawner) 
+    public void Init(Vector3 position) 
     {
-        _spawner = spawner;
+        transform.position = position;
         transform.rotation = Quaternion.identity;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
-
         _renderer.material.color = new Color(0,0,0);
         _isCollison = false;
-        _currentLifeDuration = 0;
     }
 
     private Color GenerateRandomColor() 
     {
-        return new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+        return new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
     }
 }
