@@ -2559,6 +2559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1220803447}
   - component: {fileID: 1220803448}
+  - component: {fileID: 1220803449}
   m_Layer: 0
   m_Name: Spawner
   m_TagString: Spawner
@@ -2595,6 +2596,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cubePrefab: {fileID: 736736686663724289, guid: 6b04dc18ddf4d1342bb8b1af4a496421, type: 3}
   _bombPrefab: {fileID: 4604958201413258723, guid: d18827550e30ec544b87ffd090abcca5, type: 3}
+--- !u!114 &1220803449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1220803445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160b92f78029c8c4787c66cf8c6b9840, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pool: {fileID: 1220803448}
+  _intervalSpawnCubes: 1
 --- !u!1 &1231232934
 GameObject:
   m_ObjectHideFlags: 0

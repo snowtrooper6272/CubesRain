@@ -3,65 +3,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Bomb : SpawnObject
 {
     [SerializeField] private float _radius;
     [SerializeField] private float _explosionForce;
     [SerializeField] private LayerMask explodingLayer;
     [SerializeField] private Rigidbody _rigidbody;
-    [SerializeField] private Renderer _renderer;
 
-    private Coroutine _exploding;
-    private int _minExplosionTime = 2;
-    private int _maxExplosionTime = 5;
+    private float _startAlpha = 1;
+    private float _targetAlpha = 0;
 
-    public event Action<Bomb> Stored;
-
-    private void OnDisable()
+    public override void Init(Vector3 position)
     {
-        if(_exploding != null)
-            StopCoroutine(_exploding);
+        base.Init(position);
+
+        _startAlpha = _renderer.material.color.a;
+        StartLife();
     }
 
-    public void Init(Vector3 newPosition) 
+    protected override void CoroutineUpdate(float currentTime)
     {
-        transform.position = newPosition;
-        _rigidbody.velocity = Vector3.zero;
-        _renderer.material.color = Color.black;
+        float normalizeTime = currentTime / _LifeDuration;
 
-        _exploding = StartCoroutine(Exploding());
+        _renderer.material.color = new Color(_renderer.material.color.r, _renderer.material.color.g, _renderer.material.color.b, Mathf.Lerp(_startAlpha, _targetAlpha, normalizeTime));
     }
 
-    private IEnumerator Exploding() 
+    protected override void CoroutineEnd()
     {
-        float startAlpha = _renderer.material.color.a;
-        int targetAlpha = 0;
-        int explosionTime = UnityEngine.Random.Range(_minExplosionTime, _maxExplosionTime);
-        float currentTime = 0;
+        base.CoroutineEnd();
 
-        while (currentTime <= explosionTime) 
-        {
-             currentTime += Time.deltaTime;
-            float normalizeTime = currentTime / explosionTime;
-
-            _renderer.material.color = new Color(_renderer.material.color.r, _renderer.material.color.g, _renderer.material.color.b, Mathf.Lerp(startAlpha, targetAlpha, normalizeTime));
-
-            yield return null;
-        }
-
-        Explode();
-    }
-
-    private void Explode() 
-    {
         Collider[] hits = Physics.OverlapSphere(transform.position, _radius, explodingLayer.value);
 
-        foreach (var hit in hits) 
+        foreach (var hit in hits)
         {
             if (hit.TryGetComponent(out Rigidbody rigidbody))
                 rigidbody.AddExplosionForce(_explosionForce, transform.position, _radius);
         }
-
-        Stored.Invoke(this);
     }
 }

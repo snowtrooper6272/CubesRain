@@ -359,10 +359,12 @@
 "Assets/Scripts/Cube.cs"
 "Assets/Scripts/Outputter.cs"
 "Assets/Scripts/Platform.cs"
+"Assets/Scripts/Pool.cs"
+"Assets/Scripts/PoolFactory.cs"
 "Assets/Scripts/Spawner.cs"
-"Assets/Scripts/SpawnerFactory.cs"
 "Assets/Scripts/SpawnerOutput.cs"
 "Assets/Scripts/SpawnersOutputFactory.cs"
+"Assets/Scripts/SpawnObject.cs"
 -langversion:9.0
 
 /deterministic

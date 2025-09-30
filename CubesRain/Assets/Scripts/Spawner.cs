@@ -3,51 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner<Creature> : MonoBehaviour where Creature : MonoBehaviour
+public class Spawner : MonoBehaviour
 {
-    private int _poolCapacity;
-    private int _spawnedCount;
+    [SerializeField] private PoolFactory _pool;
+    [SerializeField] private float _intervalSpawnCubes;
 
-    public event Action<int> ChangedActivedCount;
-    public event Action<int> ChangedSpawnedCount;
+    private Coroutine _spawningCubes;
 
-    public List<Creature> Pool { get; private set; } = new List<Creature>(0);
-    public int PoolCapacity => _poolCapacity;
-
-    public Spawner(Creature prefab, int capacity) 
+    private void OnEnable()
     {
-        _poolCapacity = capacity;
+        _spawningCubes = StartCoroutine(SpawningCubes());
+    }
 
-        for (int i = 0; i < _poolCapacity; i++) 
+    private void OnDisable()
+    {
+        StopCoroutine(_spawningCubes);
+    }
+
+    private IEnumerator SpawningCubes()
+    {
+        WaitForSeconds delay = new WaitForSeconds(_intervalSpawnCubes);
+
+        while (_intervalSpawnCubes > 0)
         {
-            Creature newCreature = Instantiate(prefab);
-            newCreature.gameObject.SetActive(false);
-            Pool.Add(newCreature);
+            _pool.RealeseCube();
+
+            yield return delay;
         }
-    }
-
-    public Creature Realese() 
-    {
-        if (Pool.Count == 0)
-            return null;
-
-        Creature realeseCreature = Pool[Pool.Count - 1];
-        Pool.Remove(realeseCreature);
-
-        realeseCreature.gameObject.SetActive(true);
-
-        _spawnedCount++;
-        ChangedSpawnedCount?.Invoke(_spawnedCount);
-        ChangedActivedCount?.Invoke(_poolCapacity - Pool.Count);
-
-        return realeseCreature;
-    }
-
-    public void Storing(Creature storingCreature) 
-    {
-        storingCreature.gameObject.SetActive(false);
-        Pool.Add(storingCreature);
-
-        ChangedActivedCount?.Invoke(_poolCapacity - Pool.Count);
     }
 }

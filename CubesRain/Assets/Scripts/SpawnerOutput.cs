@@ -2,30 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawnerOutput<Creature> : MonoBehaviour where Creature : MonoBehaviour
+public class SpawnerOutput<T> : MonoBehaviour where T : MonoBehaviour
 {
     private Outputter _spawnedCount;
     private Outputter _createdCount;
     private Outputter _activeCount;
 
-    private Spawner<Creature> _trackedSpawner;
+    private Pool<T> _trackedPool;
 
-    public SpawnerOutput(Spawner<Creature> trackedSpawner, Outputter spawned, Outputter created, Outputter active) 
+    public void Init(Pool<T> trackedPool, Outputter spawned, Outputter created, Outputter active) 
     {
-        _trackedSpawner = trackedSpawner;
+        _trackedPool = trackedPool;
         _spawnedCount = spawned;
         _createdCount = created;
         _activeCount = active;
 
-        _trackedSpawner.ChangedActivedCount += _activeCount.SetValue;
-        _trackedSpawner.ChangedSpawnedCount += _spawnedCount.SetValue;
+        _trackedPool.ChangedActivedCount += _activeCount.SetValue;
+        _trackedPool.ChangedSpawnedCount += _spawnedCount.SetValue;
 
-        _createdCount.SetValue(_trackedSpawner.PoolCapacity);
-    }
+        _createdCount.SetValue(_trackedPool.Capacity);
+    } 
 
     public void Exit() 
     {
-        _trackedSpawner.ChangedActivedCount -= _activeCount.SetValue;
-        _trackedSpawner.ChangedSpawnedCount -= _spawnedCount.SetValue;
+        _trackedPool.ChangedActivedCount -= _activeCount.SetValue;
+        _trackedPool.ChangedSpawnedCount -= _spawnedCount.SetValue;
     }
 }

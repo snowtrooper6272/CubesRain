@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpawnersOutputFactory : MonoBehaviour
 {
-    [SerializeField] private SpawnerFactory _spawners;
+    [SerializeField] private PoolFactory _spawners;
     [SerializeField] private Outputter _spawnedCubes;
     [SerializeField] private Outputter _createdCubes;
     [SerializeField] private Outputter _activeCubes;
@@ -17,8 +17,11 @@ public class SpawnersOutputFactory : MonoBehaviour
 
     private void Start()
     {
-        _cubeSpawnerOutput = new SpawnerOutput<Cube>(_spawners.CubeSpawner, _spawnedCubes, _createdCubes, _activeCubes);
-        _bombSpawnerOutput = new SpawnerOutput<Bomb>(_spawners.BombSpawner, _spawnedBombs, _createdBombs, _activeBombs);
+        _cubeSpawnerOutput = new SpawnerOutput<Cube>();
+        _bombSpawnerOutput = new SpawnerOutput<Bomb>();
+        
+        _cubeSpawnerOutput.Init(_spawners.CubePool, _spawnedCubes, _createdCubes, _activeCubes);
+        _bombSpawnerOutput.Init(_spawners.BombPool, _spawnedBombs, _createdBombs, _activeBombs);
     }
 
     private void OnDisable()
