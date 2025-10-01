@@ -2,21 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnObject : MonoBehaviour
 {
-    [SerializeField] protected MeshRenderer _renderer;
-    [SerializeField] protected int _MinLifeTime = 2;
-    [SerializeField] protected int _MaxLifeTime = 5;
+    [SerializeField] protected MeshRenderer Renderer;
+    [SerializeField] protected int MinLifeTime = 2;
+    [SerializeField] protected int MaxLifeTime = 5;
 
-    protected float _LifeDuration;
-    protected Coroutine _DecreaseTimeOfBackPool; 
+    protected float LifeDuration;
+    protected Coroutine DecreaseTimeOfBackPool; 
 
     public event Action<SpawnObject> Stored;
 
     private void OnDisable()
     {
-        StopCoroutine(_DecreaseTimeOfBackPool);
+        StopCoroutine(DecreaseTimeOfBackPool);
     }
 
     virtual public void Init(Vector3 position) 
@@ -24,20 +25,20 @@ public class SpawnObject : MonoBehaviour
         transform.position = position;
         transform.rotation = Quaternion.identity;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
-        _renderer.material.color = new Color(0, 0, 0, 1);
-        _LifeDuration = UnityEngine.Random.Range(_MinLifeTime, _MaxLifeTime);
+        Renderer.material.color = new Color(0, 0, 0, 1);
+        LifeDuration = Random.Range(MinLifeTime, MaxLifeTime);
     }
 
     protected void StartLife() 
     {
-        _DecreaseTimeOfBackPool = StartCoroutine(DecreaseTimeOfBackPool());
+        DecreaseTimeOfBackPool = StartCoroutine(DecreasingTimeOfBackPool());
     }
 
-    virtual protected IEnumerator DecreaseTimeOfBackPool() 
+    virtual protected IEnumerator DecreasingTimeOfBackPool() 
     {
         float currentLifeDuration = 0;
 
-        while (currentLifeDuration < _LifeDuration)
+        while (currentLifeDuration < LifeDuration)
         {
             currentLifeDuration += Time.deltaTime;
 

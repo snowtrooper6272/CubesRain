@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Cube : SpawnObject
@@ -19,7 +20,7 @@ public class Cube : SpawnObject
         {
             if (collision.gameObject.TryGetComponent(out Platform platform))
             {
-                _renderer.material.color = GenerateRandomColor();
+                Renderer.material.color = GenerateRandomColor();
                 StartLife();
 
                 _isCollison = true;
@@ -29,6 +30,6 @@ public class Cube : SpawnObject
 
     private Color GenerateRandomColor()
     {
-        return new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f));
+        return new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
     }
 }

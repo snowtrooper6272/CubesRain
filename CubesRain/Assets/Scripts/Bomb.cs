@@ -17,15 +17,15 @@ public class Bomb : SpawnObject
     {
         base.Init(position);
 
-        _startAlpha = _renderer.material.color.a;
+        _startAlpha = Renderer.material.color.a;
         StartLife();
     }
 
     protected override void CoroutineUpdate(float currentTime)
     {
-        float normalizeTime = currentTime / _LifeDuration;
+        float normalizeTime = currentTime / LifeDuration;
 
-        _renderer.material.color = new Color(_renderer.material.color.r, _renderer.material.color.g, _renderer.material.color.b, Mathf.Lerp(_startAlpha, _targetAlpha, normalizeTime));
+        Renderer.material.color = new Color(Renderer.material.color.r, Renderer.material.color.g, Renderer.material.color.b, Mathf.Lerp(_startAlpha, _targetAlpha, normalizeTime));
     }
 
     protected override void CoroutineEnd()
