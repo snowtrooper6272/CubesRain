@@ -1121,7 +1121,7 @@ GameObject:
   - component: {fileID: 466133131}
   - component: {fileID: 466133132}
   m_Layer: 5
-  m_Name: SpawnersFactory
+  m_Name: BombOutputter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1155,16 +1155,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 466133130}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b639943dbf3fb842bef811d6275f9fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 94a8b7d5b6d1dc342905c5f333cd52b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawners: {fileID: 1220803448}
-  _spawnedCubes: {fileID: 1343570862}
-  _createdCubes: {fileID: 444792569}
-  _activeCubes: {fileID: 715089512}
-  _spawnedBombs: {fileID: 112818601}
-  _createdBombs: {fileID: 1231232938}
-  _activeBombs: {fileID: 454276029}
+  _spawnedCount: {fileID: 112818601}
+  _createdCount: {fileID: 1231232938}
+  _activeCount: {fileID: 454276029}
+  _pools: {fileID: 1220803448}
 --- !u!1 &481810216
 GameObject:
   m_ObjectHideFlags: 0
@@ -2129,6 +2126,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838003734}
   m_CullTransparentMesh: 1
+--- !u!1 &907530978
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 907530979}
+  - component: {fileID: 907530980}
+  m_Layer: 0
+  m_Name: CubeOutputter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &907530979
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907530978}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.4574972, y: 1.4574972, z: 1.4574972}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1392088824}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &907530980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907530978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd2edca585035bb43992c92f75944ef9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnedCount: {fileID: 1343570862}
+  _createdCount: {fileID: 444792569}
+  _activeCount: {fileID: 715089512}
+  _pools: {fileID: 1220803448}
 --- !u!1 &932306502
 GameObject:
   m_ObjectHideFlags: 0
@@ -3161,6 +3206,7 @@ RectTransform:
   - {fileID: 715089509}
   - {fileID: 454276026}
   - {fileID: 466133131}
+  - {fileID: 907530979}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

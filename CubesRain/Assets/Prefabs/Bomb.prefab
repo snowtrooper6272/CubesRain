@@ -146,10 +146,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29dd8a3d6b47a3843af61fdf75792def, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Renderer: {fileID: 8105850332597157446}
+  MinLifeTime: 2
+  MaxLifeTime: 5
   _radius: 10
   _explosionForce: 500
   explodingLayer:
     serializedVersion: 2
     m_Bits: 64
   _rigidbody: {fileID: 4281589286689763771}
-  _renderer: {fileID: 8105850332597157446}

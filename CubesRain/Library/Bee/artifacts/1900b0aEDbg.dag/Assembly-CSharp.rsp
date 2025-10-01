@@ -357,14 +357,15 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.18f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scripts/Bomb.cs"
 "Assets/Scripts/Cube.cs"
-"Assets/Scripts/Outputter.cs"
 "Assets/Scripts/Platform.cs"
-"Assets/Scripts/Pool.cs"
-"Assets/Scripts/PoolFactory.cs"
-"Assets/Scripts/Spawner.cs"
-"Assets/Scripts/SpawnerOutput.cs"
-"Assets/Scripts/SpawnersOutputFactory.cs"
-"Assets/Scripts/SpawnObject.cs"
+"Assets/Scripts/Spawner/Output/BombSpawnerOutput.cs"
+"Assets/Scripts/Spawner/Output/CubeSpawnerOutput.cs"
+"Assets/Scripts/Spawner/Output/Outputter.cs"
+"Assets/Scripts/Spawner/Output/SpawnerOutput.cs"
+"Assets/Scripts/Spawner/Pool.cs"
+"Assets/Scripts/Spawner/PoolFactory.cs"
+"Assets/Scripts/Spawner/Spawner.cs"
+"Assets/Scripts/Spawner/SpawnObject.cs"
 -langversion:9.0
 
 /deterministic
